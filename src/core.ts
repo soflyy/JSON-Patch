@@ -63,15 +63,7 @@ export interface PatchResult<T> extends Array<OperationResult<T>> {
   newDocument: T;
 }
 
-/* We use a Javascript hash to store each
- function. Each hash entry (property) uses
- the operation identifiers specified in rfc6902.
- In this way, we can map each patch operation
- to its dedicated function in efficient way.
- */
-
-/* The operations applicable to an object */
-const objOps = {
+const originalObjOps = {
   add: function (obj, key, document) {
     obj[key] = this.value;
     return { newDocument: document };
@@ -97,11 +89,11 @@ const objOps = {
     }
 
     const originalValue = applyOperation(document,
-      { op: "remove", path: this.from }
+        { op: "remove", path: this.from }
     ).removed;
 
     applyOperation(document,
-      { op: "add", path: this.path, value: originalValue }
+        { op: "add", path: this.path, value: originalValue }
     );
 
     return { newDocument: document, removed };
@@ -110,7 +102,7 @@ const objOps = {
     const valueToCopy = getValueByPointer(document, this.from);
     // enforce copy by value so further operations don't affect source (see issue #177)
     applyOperation(document,
-      { op: "add", path: this.path, value: _deepClone(valueToCopy) }
+        { op: "add", path: this.path, value: _deepClone(valueToCopy) }
     );
     return { newDocument: document }
   },
@@ -121,10 +113,9 @@ const objOps = {
     this.value = obj[key];
     return { newDocument: document }
   }
-};
+}
 
-/* The operations applicable to an array. Many are the same as for the object */
-var arrOps = {
+const originalArrOps = {
   add: function (arr, i, document) {
     if(isInteger(i)) {
       arr.splice(i, 0, this.value);
@@ -143,11 +134,40 @@ var arrOps = {
     arr[i] = this.value;
     return { newDocument: document, removed };
   },
+  move: originalObjOps.move,
+  copy: originalObjOps.copy,
+  test: originalObjOps.test,
+  _get: originalObjOps._get
+};
+
+/* We use a Javascript hash to store each
+ function. Each hash entry (property) uses
+ the operation identifiers specified in rfc6902.
+ In this way, we can map each patch operation
+ to its dedicated function in efficient way.
+ */
+
+/* The operations applicable to an object */
+const objOps = {
+  ...originalObjOps
+};
+
+/* The operations applicable to an array. Many are the same as for the object */
+var arrOps = {
+  ...originalArrOps,
   move: objOps.move,
   copy: objOps.copy,
   test: objOps.test,
   _get: objOps._get
 };
+
+export function restoreOriginalObjOperation<T extends keyof typeof objOps>(operation: T) {
+  objOps[operation] = originalObjOps[operation];
+}
+
+export function restoreOriginalArrOperation<T extends keyof typeof arrOps>(operation: T) {
+  arrOps[operation] = originalArrOps[operation];
+}
 
 export function overrideObjOperation<T extends keyof typeof objOps>(operation: T, func: (typeof objOps)[T]) {
   objOps[operation] = func;
