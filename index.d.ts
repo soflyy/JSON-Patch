@@ -4,7 +4,8 @@ export {
     PatchError as JsonPatchError,
     _deepClone as deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 } from './module/helpers';
 
 
@@ -13,12 +14,13 @@ export {
  */
 import * as core from './module/core';
 import * as duplex from './module/duplex';
-import { PatchError as JsonPatchError, _deepClone as deepClone, escapePathComponent, unescapePathComponent } from './module/helpers';
+import { PatchError as JsonPatchError, _deepClone as deepClone, escapePathComponent, unescapePathComponent, isInteger } from './module/helpers';
 declare const _default: {
     JsonPatchError: typeof JsonPatchError;
     deepClone: typeof deepClone;
     escapePathComponent: typeof escapePathComponent;
     unescapePathComponent: typeof unescapePathComponent;
+    isInteger: typeof isInteger;
     unobserve<T>(root: T, observer: duplex.Observer<T>): void;
     observe<T>(obj: Object | T[], callback?: (patches: core.Operation[]) => void): duplex.Observer<T>;
     generate<T>(observer: duplex.Observer<Object>, invertible?: boolean): core.Operation[];

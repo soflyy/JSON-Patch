@@ -764,7 +764,7 @@ exports.JsonPatchError = helpers.PatchError;
 exports.deepClone = helpers._deepClone;
 exports.escapePathComponent = helpers.escapePathComponent;
 exports.unescapePathComponent = helpers.unescapePathComponent;
-
+exports.isInteger = helpers.isInteger;
 
 /***/ }),
 /* 3 */

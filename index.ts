@@ -4,7 +4,8 @@ export {
     PatchError as JsonPatchError,
     _deepClone as deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 } from './src/helpers';
 
 
@@ -18,7 +19,8 @@ import {
     PatchError as JsonPatchError,
     _deepClone as deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 } from './src/helpers';
 
 export default {
@@ -27,5 +29,6 @@ export default {
     JsonPatchError,
     deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 }
