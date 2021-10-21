@@ -1,14 +1,18 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import { PatchError, _deepClone, isInteger, unescapePathComponent, hasUndefined } from './helpers.mjs';
 export var JsonPatchError = PatchError;
 export var deepClone = _deepClone;
-/* We use a Javascript hash to store each
- function. Each hash entry (property) uses
- the operation identifiers specified in rfc6902.
- In this way, we can map each patch operation
- to its dedicated function in efficient way.
- */
-/* The operations applicable to an object */
-var objOps = {
+var originalObjOps = {
     add: function (obj, key, document) {
         obj[key] = this.value;
         return { newDocument: document };
@@ -49,8 +53,7 @@ var objOps = {
         return { newDocument: document };
     }
 };
-/* The operations applicable to an array. Many are the same as for the object */
-var arrOps = {
+var originalArrOps = {
     add: function (arr, i, document) {
         if (isInteger(i)) {
             arr.splice(i, 0, this.value);
@@ -70,11 +73,27 @@ var arrOps = {
         arr[i] = this.value;
         return { newDocument: document, removed: removed };
     },
-    move: objOps.move,
-    copy: objOps.copy,
-    test: objOps.test,
-    _get: objOps._get
+    move: originalObjOps.move,
+    copy: originalObjOps.copy,
+    test: originalObjOps.test,
+    _get: originalObjOps._get
 };
+/* We use a Javascript hash to store each
+ function. Each hash entry (property) uses
+ the operation identifiers specified in rfc6902.
+ In this way, we can map each patch operation
+ to its dedicated function in efficient way.
+ */
+/* The operations applicable to an object */
+var objOps = __assign({}, originalObjOps);
+/* The operations applicable to an array. Many are the same as for the object */
+var arrOps = __assign({}, originalArrOps, { move: objOps.move, copy: objOps.copy, test: objOps.test, _get: objOps._get });
+export function restoreOriginalObjOperation(operation) {
+    objOps[operation] = originalObjOps[operation];
+}
+export function restoreOriginalArrOperation(operation) {
+    arrOps[operation] = originalArrOps[operation];
+}
 export function overrideObjOperation(operation, func) {
     objOps[operation] = func;
 }

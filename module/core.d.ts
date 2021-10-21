@@ -71,18 +71,6 @@ declare const objOps: {
     };
 };
 declare var arrOps: {
-    add: (arr: any, i: any, document: any) => {
-        newDocument: any;
-        index: any;
-    };
-    remove: (arr: any, i: any, document: any) => {
-        newDocument: any;
-        removed: any;
-    };
-    replace: (arr: any, i: any, document: any) => {
-        newDocument: any;
-        removed: any;
-    };
     move: (obj: any, key: any, document: any) => {
         newDocument: any;
         removed: any;
@@ -97,7 +85,21 @@ declare var arrOps: {
     _get: (obj: any, key: any, document: any) => {
         newDocument: any;
     };
+    add: (arr: any, i: any, document: any) => {
+        newDocument: any;
+        index: any;
+    };
+    remove: (arr: any, i: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    replace: (arr: any, i: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
 };
+export declare function restoreOriginalObjOperation<T extends keyof typeof objOps>(operation: T): void;
+export declare function restoreOriginalArrOperation<T extends keyof typeof arrOps>(operation: T): void;
 export declare function overrideObjOperation<T extends keyof typeof objOps>(operation: T, func: (typeof objOps)[T]): void;
 export declare function overrideArrOperation<T extends keyof typeof arrOps>(operation: T, func: (typeof arrOps)[T]): void;
 /**
