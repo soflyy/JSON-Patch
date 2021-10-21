@@ -76,6 +76,14 @@ var arrOps = {
     test: objOps.test,
     _get: objOps._get
 };
+function overrideObjOperation(operation, func) {
+    objOps[operation] = func;
+}
+exports.overrideObjOperation = overrideObjOperation;
+function overrideArrOperation(operation, func) {
+    arrOps[operation] = func;
+}
+exports.overrideArrOperation = overrideArrOperation;
 /**
  * Retrieves a value from a JSON document by a JSON pointer.
  * Returns the value.

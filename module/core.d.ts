@@ -43,6 +43,63 @@ export interface GetOperation<T> extends BaseOperation {
 export interface PatchResult<T> extends Array<OperationResult<T>> {
     newDocument: T;
 }
+declare const objOps: {
+    add: (obj: any, key: any, document: any) => {
+        newDocument: any;
+    };
+    remove: (obj: any, key: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    replace: (obj: any, key: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    move: (obj: any, key: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    copy: (obj: any, key: any, document: any) => {
+        newDocument: any;
+    };
+    test: (obj: any, key: any, document: any) => {
+        newDocument: any;
+        test: boolean;
+    };
+    _get: (obj: any, key: any, document: any) => {
+        newDocument: any;
+    };
+};
+declare var arrOps: {
+    add: (arr: any, i: any, document: any) => {
+        newDocument: any;
+        index: any;
+    };
+    remove: (arr: any, i: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    replace: (arr: any, i: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    move: (obj: any, key: any, document: any) => {
+        newDocument: any;
+        removed: any;
+    };
+    copy: (obj: any, key: any, document: any) => {
+        newDocument: any;
+    };
+    test: (obj: any, key: any, document: any) => {
+        newDocument: any;
+        test: boolean;
+    };
+    _get: (obj: any, key: any, document: any) => {
+        newDocument: any;
+    };
+};
+export declare function overrideObjOperation<T extends keyof typeof objOps>(operation: T, func: (typeof objOps)[T]): void;
+export declare function overrideArrOperation<T extends keyof typeof arrOps>(operation: T, func: (typeof arrOps)[T]): void;
 /**
  * Retrieves a value from a JSON document by a JSON pointer.
  * Returns the value.
@@ -109,3 +166,4 @@ export declare function validator(operation: Operation, index: number, document?
  */
 export declare function validate<T>(sequence: ReadonlyArray<Operation>, document?: T, externalValidator?: Validator<T>): PatchError;
 export declare function _areEquals(a: any, b: any): boolean;
+export {};

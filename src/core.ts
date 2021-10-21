@@ -149,6 +149,15 @@ var arrOps = {
   _get: objOps._get
 };
 
+export function overrideObjOperation<T extends keyof typeof objOps>(operation: T, func: (typeof objOps)[T]) {
+  objOps[operation] = func;
+}
+
+export function overrideArrOperation<T extends keyof typeof arrOps>(operation: T, func: (typeof arrOps)[T]) {
+  arrOps[operation] = func;
+}
+
+
 /**
  * Retrieves a value from a JSON document by a JSON pointer.
  * Returns the value.
