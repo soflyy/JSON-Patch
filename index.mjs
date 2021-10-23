@@ -4,7 +4,8 @@ export {
     PatchError as JsonPatchError,
     _deepClone as deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 } from './module/helpers.mjs';
 
 
@@ -18,12 +19,14 @@ import {
     PatchError as JsonPatchError,
     _deepClone as deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 } from './module/helpers.mjs';
 
 export default Object.assign({}, core, duplex, {
     JsonPatchError,
     deepClone,
     escapePathComponent,
-    unescapePathComponent
+    unescapePathComponent,
+    isInteger
 });
